@@ -11,7 +11,7 @@ compile_error! {
 
 fn main() {
     let mut error_generic_member_access = false;
-    if cfg!(feature = "std") {
+    if cfg!(all(feature = "std", not(feature = "no_backtrace"))) {
         println!("cargo:rerun-if-changed=build/probe.rs");
 
         let consider_rustc_bootstrap;
@@ -80,7 +80,7 @@ fn main() {
         println!("cargo:rustc-cfg=anyhow_no_unsafe_op_in_unsafe_fn_lint");
     }
 
-    if !error_generic_member_access && cfg!(feature = "std") && rustc >= 65 {
+    if !error_generic_member_access && cfg!(all(feature = "std", not(feature = "no_backtrace"))) && rustc >= 65 {
         // std::backtrace::Backtrace
         // https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html#stabilized-apis
         println!("cargo:rustc-cfg=std_backtrace");
